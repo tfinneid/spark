@@ -30,6 +30,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <java.version.max>1.9</java.version.max>
         <jetty.version>9.4.33.v20201020</jetty.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <powermock.version>1.7.4</powermock.version>
@@ -170,7 +171,7 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <version>[${java.version},)</version>
+                                    <version>[${java.version},${java.version.max}]</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
