@@ -132,7 +132,6 @@ public class MatcherFilter implements Filter {
 
                 BeforeFilters.execute(context);
                 Routes.execute(context);
-                AfterFilters.execute(context);
 
             } catch (HaltException halt) {
 
@@ -149,6 +148,28 @@ public class MatcherFilter implements Filter {
                         exceptionMapper,
                         generalException);
 
+            } finally {
+                
+                try {
+
+                    AfterFilters.execute(context);
+                    
+                } catch (HaltException halt) {
+
+                    Halt.modify(httpResponse, body, halt);
+
+                } catch (Exception generalException) {
+
+                    GeneralError.modify(
+                        httpRequest,
+                        httpResponse,
+                        body,
+                        requestWrapper,
+                        responseWrapper,
+                        exceptionMapper,
+                        generalException);
+
+                }                
             }
 
             // If redirected and content is null set to empty string to not throw NotConsumedException
