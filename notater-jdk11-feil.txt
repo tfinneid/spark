@@ -1,0 +1,5 @@
+
+
+https://stackoverflow.com/questions/52966897/powermock-java-11
+
+@PowerMockIgnore
