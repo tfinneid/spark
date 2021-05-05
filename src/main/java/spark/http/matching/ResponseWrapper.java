@@ -78,6 +78,24 @@ class ResponseWrapper extends Response {
     }
 
     @Override
+    public void setRedirect(String location) {
+        redirected = true;
+        delegate.setRedirect(location);
+    }
+
+    @Override
+    public void redirectAndHalt(String location) {
+        redirected = true;
+        delegate.redirectAndHalt(location);
+    }
+
+    @Override
+    public void redirectAndHalt(String location, int httpStatusCode) {
+        redirected = true;
+        delegate.redirectAndHalt(location, httpStatusCode);
+    }
+
+    @Override
     public void redirect(String location) {
         redirected = true;
         delegate.redirect(location);

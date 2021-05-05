@@ -111,7 +111,48 @@ public class Response {
     }
 
     /**
-     * Trigger a browser redirect
+     * Configures for a 302 redirect, without triggering the redirect.
+     * Filters and Routes can affect the response before transmission.
+     *
+     * @param location Where to redirect
+     */
+    public void setRedirect(String location) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Redirecting ({} {} to {}", "Found", HttpServletResponse.SC_FOUND, location);
+        }
+        response.setStatus(302);
+        response.setHeader("Location", location);
+    }
+
+    /**
+     * Trigger a browser redirect with 302
+     * All filters can affect the response before transmission.
+     *
+     * @param location Where to redirect
+     */
+    public void redirectAndHalt(String location) {
+        setRedirect(location);
+        throw new HaltException(response.getStatus());
+    }
+
+    /**
+     * Trigger a browser redirect with specific http 3XX status code.
+     * All filters can affect the response before transmission.
+     *
+     * @param location       Where to redirect permanently
+     * @param httpStatusCode the http status code
+     */
+    public void redirectAndHalt(String location, int httpStatusCode) {
+        setRedirect(location);
+        if (httpStatusCode >= 300 && httpStatusCode <= 399)
+            response.setStatus(httpStatusCode);
+        response.setHeader("Connection", "close");
+        throw new HaltException(httpStatusCode);
+    }
+
+    /**
+     * Trigger an immediate browser redirect.
+     * Filters or handlers will not affect response or body after the method call.
      *
      * @param location Where to redirect
      */
@@ -127,7 +168,8 @@ public class Response {
     }
 
     /**
-     * Trigger a browser redirect with specific http 3XX status code.
+     * Trigger an immediate browser redirect with specific http status code.
+     * Filters or handlers will not affect response or body after the method call.
      *
      * @param location       Where to redirect permanently
      * @param httpStatusCode the http status code

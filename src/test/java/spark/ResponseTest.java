@@ -11,6 +11,7 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class ResponseTest {
@@ -288,5 +289,72 @@ public class ResponseTest {
         verify(httpServletResponse).setHeader("Location", finalLocation);
         verify(httpServletResponse).setHeader("Connection", "close");
         verify(httpServletResponse).sendError(finalStatusCode);
+    }
+
+    @Test
+    public void testSetRedirect_whenLocationParameters_shouldModifyStatusCodeAndHaltSuccessfully() { // NOSONAR
+        final String finalLocation = "/test";
+
+        response.setRedirect(finalLocation);
+
+        verify(httpServletResponse).setStatus(Redirect.Status.FOUND.intValue());
+        verify(httpServletResponse).setHeader("Location", finalLocation);
+    }
+
+    @Test
+    public void testRedirectAndHalt_whenLocationAndHttpStatusCodeParameters_shouldModifyStatusCodeAndHaltSuccessfully() { // NOSONAR
+        HaltException he = null;
+
+        final String finalLocation = "/test";
+
+        try {
+            response.redirectAndHalt(finalLocation);
+        } catch (HaltException e) {
+            he = e;
+        }
+
+        if (he == null) fail("HaltExcpetion expected");
+
+        verify(httpServletResponse).setStatus(Redirect.Status.FOUND.intValue());
+        verify(httpServletResponse).setHeader("Location", finalLocation);
+    }
+
+    @Test
+    public void testRedirectAndHalt_whenLocationAndHttpStatusCodeParameters_shouldModifyStatusCodeSuccessfully() { // NOSONAR
+        HaltException he = null;
+
+        final String finalLocation = "/test";
+        int finalStatusCode = Redirect.Status.SEE_OTHER.intValue();
+
+        try {
+            response.redirectAndHalt(finalLocation, finalStatusCode);
+        } catch (HaltException e) {
+            he = e;
+        }
+
+        if (he == null) fail("HaltExcpetion expected");
+
+        verify(httpServletResponse).setStatus(finalStatusCode);
+        verify(httpServletResponse).setHeader("Location", finalLocation);
+        verify(httpServletResponse).setHeader("Connection", "close");
+    }
+
+    @Test
+    public void testRedirectAndHalt_whenLocationAndHttpStatusCodeParameters_shouldNotAcceptNon300StatusCode() { // NOSONAR
+        HaltException he = null;
+
+        final String finalLocation = "/test";
+
+        try {
+            response.redirectAndHalt(finalLocation, HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+        } catch (HaltException e) {
+            he = e;
+        }
+
+        if (he == null) fail("HaltExcpetion expected");
+
+        verify(httpServletResponse).setStatus(HttpServletResponse.SC_FOUND);
+        verify(httpServletResponse).setHeader("Location", finalLocation);
+        verify(httpServletResponse).setHeader("Connection", "close");
     }
 }
