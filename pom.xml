@@ -158,26 +158,26 @@
                     <debug>true</debug>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>1.4.1</version>
-                <executions>
-                    <execution>
-                        <id>enforce-java</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireJavaVersion>
-                                    <version>[${java.version},${java.version.max}]</version>
-                                </requireJavaVersion>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-enforcer-plugin</artifactId>-->
+<!--                <version>1.4.1</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>enforce-java</id>-->
+<!--                        <goals>-->
+<!--                            <goal>enforce</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <rules>-->
+<!--                                <requireJavaVersion>-->
+<!--                                    <version>[${java.version},${java.version.max}]</version>-->
+<!--                                </requireJavaVersion>-->
+<!--                            </rules>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -185,6 +185,7 @@
                 <configuration>
                     <forkCount>1</forkCount>
                     <reuseForks>false</reuseForks>
+                    <argLine>--add-opens java.xml/jdk.xml.internal=ALL-UNNAMED</argLine>
                 </configuration>
             </plugin>
             <plugin>

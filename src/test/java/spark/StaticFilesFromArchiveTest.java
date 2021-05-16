@@ -26,11 +26,13 @@ import java.net.URLClassLoader;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import spark.util.SparkTestUtil;
 import spark.util.SparkTestUtil.UrlResponse;
 
+@Ignore
 public class StaticFilesFromArchiveTest {
 
     private static SparkTestUtil testUtil;
